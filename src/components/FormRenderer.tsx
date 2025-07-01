@@ -50,7 +50,12 @@ if (!selectedForm) {
               id={field.id}
               name={field.id}
               type={field.type}
-              value={(fieldPrefill?.value ?? "") as string}
+              // value={(fieldPrefill?.value ?? "") as string}
+              value={
+                fieldPrefill?.sourceType === 'global'
+                ? (fieldPrefill.value as string)
+                : ''
+              }
               onChange={(e) =>
                 onFieldChange(selectedForm.id, field.id, e.target.value)
               }

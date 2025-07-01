@@ -57,24 +57,24 @@ function App() {
   };
 
   //placeholder for modal-based version
-  const setPrefillFromField = (
-    formId: string,
-    fieldId: string,
-    sourceFormId: string,
-    sourceFieldId: string
-  ) => {
-    const config = {
-      sourceType: 'form' as const,
-      sourceFormId,
-      sourceFieldId,
-    };
-    dispatch({
-      type: 'UPDATE_PREFILL',
-      formId,
-      fieldId,
-      config,
-    });
-  };
+  // const setPrefillFromField = (
+  //   formId: string,
+  //   fieldId: string,
+  //   sourceFormId: string,
+  //   sourceFieldId: string
+  // ) => {
+  //   const config = {
+  //     sourceType: 'form' as const,
+  //     sourceFormId,
+  //     sourceFieldId,
+  //   };
+  //   dispatch({
+  //     type: 'UPDATE_PREFILL',
+  //     formId,
+  //     fieldId,
+  //     config,
+  //   });
+  // };
 
   return (
     <div>
