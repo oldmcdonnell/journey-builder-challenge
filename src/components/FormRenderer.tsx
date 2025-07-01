@@ -16,10 +16,16 @@ interface FormRendererProps {
   forms: FormData[];
   selectedFormId: string | null;
   onFieldChange: (formId: string, fieldId: string, value: any) => void;
+  prefillMap?: Record<string, PrefillConfig>;
 }
 
-const FormRenderer: React.FC<FormRendererProps> = ({ forms, selectedFormId, onFieldChange }) => {
-  const selectedForm = forms.find(form => form.id === selectedFormId);
+const FormRenderer: React.FC<FormRendererProps> = ({
+  forms,
+  selectedFormId,
+  onFieldChange,
+  prefillMap,
+}) => {
+  const selectedForm = forms.find((form) => form.id === selectedFormId);
 
   if (!selectedForm) {
     return <div>Please select a form to view.</div>;
@@ -28,14 +34,20 @@ const FormRenderer: React.FC<FormRendererProps> = ({ forms, selectedFormId, onFi
   return (
     <div>
       <h2>{selectedForm.name}</h2>
-      {selectedForm.fields.map(field => (
-        <div key={field.id} style={{ marginBottom: '1rem' }}>
-          <label htmlFor={field.id}>{field.label}</label><br />
+      {selectedForm.fields.map((field) => (
+        <div key={field.id} style={{ marginBottom: "1rem" }}>
+          <label htmlFor={field.id}>{field.label}</label>
+          <br />
           <input
             id={field.id}
             name={field.id}
             type={field.type}
-            onChange={(e) => onFieldChange(selectedForm.id, field.id, e.target.value)}
+            value={
+              prefillMap?.[selectedForm.id]?.[field.id]?.value ?? ""
+            }
+            onChange={(e) =>
+              onFieldChange(selectedForm.id, field.id, e.target.value)
+            }
           />
         </div>
       ))}

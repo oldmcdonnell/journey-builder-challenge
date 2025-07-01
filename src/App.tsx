@@ -14,10 +14,17 @@ function App() {
       .catch(error => console.error(error));
   }, []);
 
-  const handleFieldChange = (formId: string, fieldId: string, value: any) => {
-    // You can dispatch this to store form values later
-    console.log(`Changed ${fieldId} on ${formId} to ${value}`);
-  };
+const handleFieldChange = (formId: string, fieldId: string, value: any) => {
+  dispatch({
+    type: 'UPDATE_PREFILL',
+    formId,
+    fieldId,
+    config: {
+      sourceType: 'global', // or 'form' — depending on your use case
+      value,
+    },
+  });
+};
 
   return (
     <div>
@@ -32,6 +39,7 @@ function App() {
       <FormRenderer
         forms={state.forms}
         selectedFormId={state.selectedFormId}
+        prefillMap={state.prefillMap}
         onFieldChange={handleFieldChange}
       />
     </div>

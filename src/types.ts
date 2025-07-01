@@ -17,5 +17,6 @@ export interface PrefillConfig {
     sourceFormId?: string;
     sourceFieldId?: string;
     globalKey?: string;
+    value?: any; // Optional, if sourceType is 'global' or 'form'   
   };
 }
