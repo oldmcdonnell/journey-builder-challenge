@@ -9,7 +9,25 @@
           "type": "text",
           "label": "Name"
         }
-      ]
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "form2",
+      "name": "Shipping Info",
+      "fields": [
+        { "id": "field1", "name": "fullName", "type": "text", "label": "Full Name" },
+        { "id": "field2", "name": "address", "type": "text", "label": "Address" }
+      ],
+      "dependencies": ["form1"]
+    },
+    {
+      "id": "form3",
+      "name": "Preferences",
+      "fields": [
+        { "id": "field1", "name": "newsletter", "type": "checkbox", "label": "Subscribe to newsletter?" }
+      ],
+      "dependencies": []
     }
   ]
 }

@@ -11,12 +11,20 @@ export interface FormNode {
   dependencies: string[]; // IDs of forms this one depends on
 }
 
-export interface PrefillConfig {
-  [fieldId: string]: {
-    sourceType: 'form' | 'global';
-    sourceFormId?: string;
-    sourceFieldId?: string;
-    globalKey?: string;
-    value?: any; // Optional, if sourceType is 'global' or 'form'   
-  };
-}
+type FormPrefill = {
+  sourceType: 'form';
+  sourceFormId: string;
+  sourceFieldId: string;
+};
+
+type GlobalPrefill = {
+  sourceType: 'global';
+  value: any;
+  globalKey?: string;
+};
+
+export type FieldPrefill = FormPrefill | GlobalPrefill;
+
+export type PrefillConfig = {
+  [fieldId: string]: FieldPrefill;
+};

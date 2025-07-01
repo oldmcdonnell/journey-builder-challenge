@@ -32,9 +32,10 @@ const FormRenderer: React.FC<FormRendererProps> = ({
 }) => {
   const selectedForm = forms.find((form) => form.id === selectedFormId);
 
-  if (!selectedForm) {
-    return <div>Please select a form to view.</div>;
-  }
+if (!selectedForm) {
+  console.warn('Selected form ID not found:', selectedFormId, 'in', forms);
+  return <div>Please select a form to view.</div>;
+}
 
   return (
     <div>
@@ -49,7 +50,7 @@ const FormRenderer: React.FC<FormRendererProps> = ({
               id={field.id}
               name={field.id}
               type={field.type}
-              value={fieldPrefill?.value ?? ""}
+              value={(fieldPrefill?.value ?? "") as string}
               onChange={(e) =>
                 onFieldChange(selectedForm.id, field.id, e.target.value)
               }
