@@ -1,0 +1,15 @@
+{
+  "forms": [
+    {
+      "id": "form1",
+      "name": "Example Form",
+      "fields": [
+        {
+          "id": "field1",
+          "type": "text",
+          "label": "Name"
+        }
+      ]
+    }
+  ]
+}

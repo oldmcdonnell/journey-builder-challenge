@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useReducer } from 'react';
+import FormRenderer from './components/FormRenderer';
+import { fetchActionBlueprintGraph } from './api/api';
+import { formReducer, initialState } from './reducer/formReducer';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [state, dispatch] = useReducer(formReducer, initialState);
+
+  useEffect(() => {
+    fetchActionBlueprintGraph()
+      .then(data => {
+        dispatch({ type: 'SET_FORMS', payload: data.forms });
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  const handleFieldChange = (formId: string, fieldId: string, value: any) => {
+    // You can dispatch this to store form values later
+    console.log(`Changed ${fieldId} on ${formId} to ${value}`);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <h1>Dynamic Forms</h1>
+      <select onChange={e => dispatch({ type: 'SELECT_FORM', payload: e.target.value })}>
+        <option value="">Select a form</option>
+        {state.forms.map(form => (
+          <option key={form.id} value={form.id}>{form.name}</option>
+        ))}
+      </select>
+
+      <FormRenderer
+        forms={state.forms}
+        selectedFormId={state.selectedFormId}
+        onFieldChange={handleFieldChange}
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
