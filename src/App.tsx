@@ -26,6 +26,39 @@ const handleFieldChange = (formId: string, fieldId: string, value: any) => {
   });
 };
 
+
+const handleClearPrefill = (formId: string, fieldId: string) => {
+  dispatch({
+    type: 'CLEAR_PREFILL',
+    formId,
+    fieldId,
+  });
+};
+
+const handleOpenPrefillModal = (formId: string, fieldId: string) => {
+  const sourceFormId = prompt('Enter source form ID:');
+  const sourceFieldId = prompt('Enter source field ID:');
+  if (sourceFormId && sourceFieldId) {
+    const config = {
+      sourceType: 'form',
+      sourceFormId,
+      sourceFieldId,
+    };
+    console.log('Dispatching prefill config:', { formId, fieldId, config });
+    dispatch({
+      type: 'UPDATE_PREFILL',
+      formId,
+      fieldId,
+      config: {
+        sourceType: 'form',
+        sourceFormId,
+        sourceFieldId,
+      },
+    });
+  } else {
+    console.log('Source form ID and field ID are required to set prefill.');}
+};
+
   return (
     <div>
       <h1>Dynamic Forms</h1>
@@ -41,6 +74,8 @@ const handleFieldChange = (formId: string, fieldId: string, value: any) => {
         selectedFormId={state.selectedFormId}
         prefillMap={state.prefillMap}
         onFieldChange={handleFieldChange}
+        onClearPrefill={handleClearPrefill}
+        onOpenPrefillModal={handleOpenPrefillModal}
       />
     </div>
   );
