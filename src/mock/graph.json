@@ -1,0 +1,27 @@
+{
+  "forms": [
+    {
+      "id": "f_456",
+      "name": "My Form",
+      "description": "This is my form",
+      "fields": [
+        { "id": "email", "name": "Email", "type": "string" },
+        { "id": "checkbox", "name": "Checkbox Group", "type": "boolean" }
+      ]
+    }
+  ],
+  "edges": [
+    { "source": "f_123", "target": "f_456" }
+  ],
+  "nodes": [
+    {
+      "id": "f_456",
+      "position": { "x": 0, "y": 0 },
+      "type": "form",
+      "data": {
+        "name": "My Form",
+        "component_key": "f_456"
+      }
+    }
+  ]
+}
