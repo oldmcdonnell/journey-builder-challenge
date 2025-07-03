@@ -1,5 +1,6 @@
 import React from "react";
 import type { PrefillConfig } from "../types";
+import getFieldsFromSchema from "../utils/formutils";
 
 interface Field {
   id: string;
@@ -21,6 +22,7 @@ interface FormRendererProps {
   onClearPrefill: (formId: string, fieldId: string) => void;
   onOpenPrefillModal: (formId: string, fieldId: string) => void;
 }
+
 
 const FormRenderer: React.FC<FormRendererProps> = ({
   forms,
