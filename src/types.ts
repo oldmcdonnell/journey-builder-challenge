@@ -39,3 +39,10 @@ export interface FormRendererProps {
   onClearPrefill: (formId: string, fieldId: string) => void;
   onOpenPrefillModal: (formId: string, fieldId: string) => void;
 }
+
+export interface FormData {
+  id: string;
+  name: string;
+  field_schema?: any;
+  ui_schema?: any;
+}
