@@ -40,48 +40,39 @@ if (!selectedForm) {
   return (
     <div>
       <h2>{selectedForm.name}</h2>
-      {selectedForm.fields.map((field) => {
-        const fieldPrefill = prefillMap?.[selectedForm.id]?.[field.id];
-        return (
-          <div key={field.id} style={{ marginBottom: "1rem" }}>
-            <label htmlFor={field.id}>{field.label}</label>
-            <br />
-            <input
-              id={field.id}
-              name={field.id}
-              type={field.type}
-              // value={(fieldPrefill?.value ?? "") as string}
-              value={
-                fieldPrefill?.sourceType === 'global'
-                ? (fieldPrefill.value as string)
-                : ''
-              }
-              onChange={(e) =>
-                onFieldChange(selectedForm.id, field.id, e.target.value)
-              }
-            />
-            <div style={{ marginTop: "0.5rem" }}>
-              {fieldPrefill ? (
-                <button
-                  onClick={() =>
-                    onClearPrefill(selectedForm.id, field.id)
-                  }
-                >
-                  ❌ Clear Prefill
-                </button>
-              ) : (
-                <button
-                  onClick={() =>
-                    onOpenPrefillModal(selectedForm.id, field.id)
-                  }
-                >
-                  ➕ Set Prefill
-                </button>
-              )}
+          {selectedForm.fields?.map((field) => {
+            const fieldPrefill = prefillMap?.[selectedForm.id]?.[field.id];
+            return (
+            <div key={field.id} style={{ marginBottom: "1rem" }}>
+              <label htmlFor={field.id}>{field.label}</label>
+              <br />
+              <input
+                id={field.id}
+                name={field.id}
+                type={field.type}
+                value={
+                  fieldPrefill?.sourceType === 'global'
+                    ? (fieldPrefill.value as string)
+                    : ''
+                }
+                onChange={(e) =>
+                  onFieldChange(selectedForm.id, field.id, e.target.value)
+                }
+              />
+              <div style={{ marginTop: "0.5rem" }}>
+                {fieldPrefill ? (
+                  <button onClick={() => onClearPrefill(selectedForm.id, field.id)}>
+                    ❌ Clear Prefill
+                  </button>
+                ) : (
+                  <button onClick={() => onOpenPrefillModal(selectedForm.id, field.id)}>
+                    ➕ Set Prefill
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 };

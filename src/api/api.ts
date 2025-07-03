@@ -7,9 +7,8 @@
 // const VERSION_ID = 'bpv_123';
 
 
-
 export const fetchActionBlueprintGraph = async () => {
-  const response = await fetch('/mock/graph.json');
+  const response = await fetch('http://localhost:3000/api/v1/123/actions/blueprints/bp_456/bpv_123/graph');
   if (!response.ok) throw new Error('Failed to load mock graph');
   return response.json();
 };
