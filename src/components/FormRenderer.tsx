@@ -1,9 +1,7 @@
-import React from "react";
-import type { FormRendererProps } from "../types";
-import { getFieldsFromSchema } from "../utils/formutils"; // ✅ Named import
-
-
-
+import React, { useState } from "react";
+import type { FormRendererProps, FieldPrefill } from "../types";
+import { getFieldsFromSchema } from "../utils/formutils";
+import PrefillModal from "./PrefillModal"; // If you're using default export
 
 const FormRenderer: React.FC<FormRendererProps> = ({
   forms,
@@ -13,6 +11,11 @@ const FormRenderer: React.FC<FormRendererProps> = ({
   onClearPrefill,
   onOpenPrefillModal,
 }) => {
+  const [modalField, setModalField] = useState<{
+    formId: string;
+    fieldId: string;
+  } | null>(null);
+
   const selectedForm = forms.find((form) => form.id === selectedFormId);
 
   if (!selectedForm) {
@@ -20,13 +23,27 @@ const FormRenderer: React.FC<FormRendererProps> = ({
     return <div>Please select a form to view.</div>;
   }
 
-  const fields = getFieldsFromSchema(selectedForm.field_schema, selectedForm.ui_schema); // ✅ Compute fields
+  const fields = getFieldsFromSchema(
+    selectedForm.field_schema,
+    selectedForm.ui_schema
+  );
+
+  // Handles selecting a prefill source from the modal
+  const handleSelect = (
+    prefillData: FieldPrefill,
+    formId: string,
+    fieldId: string
+  ) => {
+    onFieldChange(formId, fieldId, prefillData); // If you want to support both global/form sources
+  };
 
   return (
     <div>
       <h2>{selectedForm.name}</h2>
+
       {fields.map((field) => {
         const fieldPrefill = prefillMap?.[selectedForm.id]?.[field.id];
+
         return (
           <div key={field.id} style={{ marginBottom: "1rem" }}>
             <label htmlFor={field.id}>{field.label}</label>
@@ -53,7 +70,9 @@ const FormRenderer: React.FC<FormRendererProps> = ({
                 </button>
               ) : (
                 <button
-                  onClick={() => onOpenPrefillModal(selectedForm.id, field.id)}
+                  onClick={() =>
+                    setModalField({ formId: selectedForm.id, fieldId: field.id })
+                  }
                 >
                   ➕ Set Prefill
                 </button>
@@ -62,6 +81,18 @@ const FormRenderer: React.FC<FormRendererProps> = ({
           </div>
         );
       })}
+
+      {/* ✅ Modal Rendering */}
+      {modalField && (
+        <PrefillModal
+          availableForms={forms} // you might want to filter these
+          onSelect={(prefillData) => {
+            handleSelect(prefillData, modalField.formId, modalField.fieldId);
+            setModalField(null);
+          }}
+          onCancel={() => setModalField(null)}
+        />
+      )}
     </div>
   );
 };

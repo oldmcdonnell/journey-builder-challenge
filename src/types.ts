@@ -1,13 +1,14 @@
-export interface FormField {
+export interface Field {
   id: string;
-  name: string;
-  type: string;
+  name: string;     // Logical name of the field
+  type: string;     // e.g., 'text', 'checkbox', etc.
+  label?: string;   // Optional display label
 }
 
 export interface FormNode {
   id: string;
   name: string;
-  fields: FormField[];
+  fields: Field[]; // Using unified Field type
   dependencies: string[]; // IDs of forms this one depends on
   field_schema: any;
   ui_schema: any;
@@ -43,6 +44,25 @@ export interface FormRendererProps {
 export interface FormData {
   id: string;
   name: string;
+  fields: Field[]; // Optional if using schema-based generation
   field_schema?: any;
   ui_schema?: any;
+}
+
+export interface PrefillModalProps {
+  availableForms: {
+    id: string;
+    name: string;
+    fields: { id: string; label?: string }[];
+  }[];
+  onSelect: (prefill: { sourceType: 'form'; sourceFormId: string; sourceFieldId: string }) => void;
+  onCancel: () => void;
+}
+
+export interface ParsedField {
+  id: string;
+  label: string;
+  type: string;
+  avantos_type: string | null;
+  required: boolean;
 }
