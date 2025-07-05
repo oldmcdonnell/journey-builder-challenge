@@ -63,3 +63,9 @@ export interface ParsedField {
   avantos_type: string | null;
   required: boolean;
 }
+
+export interface DependencySelectorProps {
+  dispatch: React.Dispatch<Action>;
+  availableForms: FormNode[];
+  selectedFormId: string;
+}
