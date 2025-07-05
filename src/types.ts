@@ -50,11 +50,8 @@ export interface FormData {
 }
 
 export interface PrefillModalProps {
-  availableForms: {
-    id: string;
-    name: string;
-    fields: { id: string; label?: string }[];
-  }[];
+  availableForms: FormNode[];
+  selectedForm: FormNode;
   onSelect: (prefill: { sourceType: 'form'; sourceFormId: string; sourceFieldId: string }) => void;
   onCancel: () => void;
 }

@@ -85,7 +85,9 @@ const FormRenderer: React.FC<FormRendererProps> = ({
       {/* ✅ Modal Rendering */}
       {modalField && (
         <PrefillModal
-          availableForms={forms} // you might want to filter these
+          availableForms={forms}
+          selectedForm={selectedForm}
+           // you might want to filter these
           onSelect={(prefillData) => {
             handleSelect(prefillData, modalField.formId, modalField.fieldId);
             setModalField(null);

@@ -2,13 +2,22 @@ import React from "react";
 import type { PrefillModalProps } from "../types";
 
 
-const PrefillModal: React.FC<PrefillModalProps> = ({ availableForms, onSelect, onCancel }) => {
+const PrefillModal: React.FC<PrefillModalProps> = ({
+  availableForms,
+  selectedForm,
+  onSelect,
+  onCancel
+}) => {
+  const allowedForms = availableForms.filter(form =>
+    selectedForm.dependencies.includes(form.id)
+  );
+
   return (
     <div className="modal">
       <div className="modal-content">
         <h2>Select data element to map</h2>
         <ul>
-          {availableForms.map((form) => (
+          {allowedForms.map((form) => (
             <li key={form.id}>
               <strong>{form.name}</strong>
               <ul>
