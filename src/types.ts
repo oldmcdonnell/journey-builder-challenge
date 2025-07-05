@@ -1,3 +1,5 @@
+import type { Action } from './reducer/formReducer'; 
+
 export interface Field {
   id: string;
   name: string;     // Logical name of the field
