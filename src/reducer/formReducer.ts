@@ -26,7 +26,13 @@ export const initialState: State = {
 export function formReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'SET_FORMS':
-      return { ...state, forms: action.payload };
+      return {
+        ...state,
+        forms: action.payload.map(form => ({
+          ...form,
+          dependencies: form.dependencies || [], // Ensure it's always an array
+        }))
+      };
 
     case 'SELECT_FORM':
       return { ...state, selectedFormId: action.payload };

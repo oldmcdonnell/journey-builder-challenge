@@ -3,31 +3,18 @@ import FormRenderer from './components/FormRenderer';
 import { fetchActionBlueprintGraph } from './api/api';
 import { formReducer, initialState } from './reducer/formReducer';
 
-
 function App() {
   const [state, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
     fetchActionBlueprintGraph()
-      .then(data => {
+      .then((data) => {
         dispatch({ type: 'SET_FORMS', payload: data.forms });
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   }, []);
 
-  const selectedForm = state.forms.find(form => form.id === state.selectedFormId);
-
-  const handleFieldChange = (formId: string, fieldId: string, value: any) => {
-    dispatch({
-      type: 'UPDATE_PREFILL',
-      formId,
-      fieldId,
-      config: {
-        sourceType: 'global' as const,
-        value,
-      },
-    });
-  };
+  const selectedForm = state.forms.find((form) => form.id === state.selectedFormId);
 
   const handleClearPrefill = (formId: string, fieldId: string) => {
     dispatch({
@@ -41,16 +28,15 @@ function App() {
     const sourceFormId = prompt('Enter source form ID:');
     const sourceFieldId = prompt('Enter source field ID:');
     if (sourceFormId && sourceFieldId) {
-      const config = {
-        sourceType: 'form' as const,
-        sourceFormId,
-        sourceFieldId,
-      };
       dispatch({
         type: 'UPDATE_PREFILL',
         formId,
         fieldId,
-        config,
+        config: {
+          sourceType: 'form',
+          sourceFormId,
+          sourceFieldId,
+        },
       });
     }
   };
@@ -59,11 +45,13 @@ function App() {
     <div>
       <h1>Dynamic Forms</h1>
       <select
-        onChange={e => dispatch({ type: 'SELECT_FORM', payload: e.target.value })}
+        onChange={(e) =>
+          dispatch({ type: 'SELECT_FORM', payload: e.target.value })
+        }
         value={state.selectedFormId || ''}
       >
         <option value="">Select a form</option>
-        {state.forms.map(form => (
+        {state.forms.map((form) => (
           <option key={form.id} value={form.id}>
             {form.name}
           </option>
@@ -74,10 +62,21 @@ function App() {
         <FormRenderer
           forms={state.forms}
           selectedFormId={selectedForm.id}
-          onFieldChange={handleFieldChange}
+          onFieldChange={(formId, fieldId, value) => {
+            dispatch({
+              type: 'UPDATE_PREFILL',
+              formId,
+              fieldId,
+              config: {
+                sourceType: 'global',
+                value,
+              },
+            });
+          }}
           prefillMap={state.prefillMap}
           onClearPrefill={handleClearPrefill}
           onOpenPrefillModal={handleOpenPrefillModal}
+          dispatch={dispatch}
         />
       ) : (
         <p>Please select a form to view.</p>

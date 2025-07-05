@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import type { FormRendererProps, FieldPrefill } from "../types";
 import { getFieldsFromSchema } from "../utils/formutils";
-import PrefillModal from "./PrefillModal"; // If you're using default export
+import PrefillModal from "./PrefillModal"; 
+import DependencySelector from "./DependencySelector";
+import type { Action } from '../reducer/formReducer'; 
 
-const FormRenderer: React.FC<FormRendererProps> = ({
+
+const FormRenderer: React.FC<FormRendererProps & { dispatch: React.Dispatch<Action> }> = ({
   forms,
   selectedFormId,
   onFieldChange,
   prefillMap,
   onClearPrefill,
   onOpenPrefillModal,
+  dispatch, // ✅ From reducer
 }) => {
   const [modalField, setModalField] = useState<{
     formId: string;
@@ -28,18 +32,24 @@ const FormRenderer: React.FC<FormRendererProps> = ({
     selectedForm.ui_schema
   );
 
-  // Handles selecting a prefill source from the modal
   const handleSelect = (
     prefillData: FieldPrefill,
     formId: string,
     fieldId: string
   ) => {
-    onFieldChange(formId, fieldId, prefillData); // If you want to support both global/form sources
+    onFieldChange(formId, fieldId, prefillData);
   };
 
   return (
     <div>
       <h2>{selectedForm.name}</h2>
+
+      {/* ✅ Proper dispatch passed here */}
+      <DependencySelector
+        dispatch={dispatch}
+        availableForms={forms}
+        selectedFormId={selectedForm.id}
+      />
 
       {fields.map((field) => {
         const fieldPrefill = prefillMap?.[selectedForm.id]?.[field.id];
@@ -82,12 +92,10 @@ const FormRenderer: React.FC<FormRendererProps> = ({
         );
       })}
 
-      {/* ✅ Modal Rendering */}
       {modalField && (
         <PrefillModal
           availableForms={forms}
           selectedForm={selectedForm}
-           // you might want to filter these
           onSelect={(prefillData) => {
             handleSelect(prefillData, modalField.formId, modalField.fieldId);
             setModalField(null);
