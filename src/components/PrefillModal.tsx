@@ -9,8 +9,8 @@ const PrefillModal: React.FC<PrefillModalProps> = ({
   onCancel
 }) => {
   const allowedForms = availableForms.filter(form =>
-    (selectedForm || []).includes(form.id)
-  );
+  (selectedForm.dependencies || []).includes(form.id)
+);
 
   return (
     <div className="modal">
