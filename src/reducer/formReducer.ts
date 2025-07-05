@@ -13,7 +13,8 @@ export type Action =
   | { type: 'UPDATE_PREFILL'; formId: string; fieldId: string; config: PrefillConfig[string] }
   | { type: 'CLEAR_PREFILL'; formId: string; fieldId: string }
   | { type: 'SHOW_MODAL'; payload: string }
-  | { type: 'HIDE_MODAL' };
+  | { type: 'HIDE_MODAL' }
+  | { type: 'TOGGLE_DEPENDENCY'; formId: string; dependencyId: string };
 
 export const initialState: State = {
   forms: [],
@@ -26,8 +27,26 @@ export function formReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'SET_FORMS':
       return { ...state, forms: action.payload };
+
     case 'SELECT_FORM':
       return { ...state, selectedFormId: action.payload };
+
+    case 'TOGGLE_DEPENDENCY': {
+      const { formId, dependencyId } = action;
+      const updatedForms = state.forms.map(form => {
+        if (form.id !== formId) return form;
+
+        const dependencies = form.dependencies || [];
+        const updatedDependencies = dependencies.includes(dependencyId)
+          ? dependencies.filter(id => id !== dependencyId)
+          : [...dependencies, dependencyId];
+
+        return { ...form, dependencies: updatedDependencies };
+      });
+
+      return { ...state, forms: updatedForms };
+    }
+
     case 'UPDATE_PREFILL': {
       const { formId, fieldId, config } = action;
       const updated = {
@@ -39,6 +58,7 @@ export function formReducer(state: State, action: Action): State {
         prefillMap: { ...state.prefillMap, [formId]: updated },
       };
     }
+
     case 'CLEAR_PREFILL': {
       const { formId, fieldId } = action;
       const newMap = { ...state.prefillMap[formId] };
@@ -48,11 +68,15 @@ export function formReducer(state: State, action: Action): State {
         prefillMap: { ...state.prefillMap, [formId]: newMap },
       };
     }
+
     case 'SHOW_MODAL':
       return { ...state, modalFieldId: action.payload };
+
     case 'HIDE_MODAL':
       return { ...state, modalFieldId: null };
+
     default:
       return state;
   }
 }
+

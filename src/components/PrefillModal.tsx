@@ -8,9 +8,19 @@ const PrefillModal: React.FC<PrefillModalProps> = ({
   onSelect,
   onCancel
 }) => {
+console.log("selectedForm:", selectedForm);
+console.log("selectedForm.dependencies:", selectedForm.dependencies);
+console.log("availableForms:", availableForms);
   const allowedForms = availableForms.filter(form =>
   (selectedForm.dependencies || []).includes(form.id)
 );
+console.log("Allowed Forms:", allowedForms);
+// const allowedForms =
+//   selectedForm.dependencies?.length > 0
+//     ? availableForms.filter((form) =>
+//         selectedForm.dependencies.includes(form.id)
+//       )
+//     : availableForms;
 
   return (
     <div className="modal">
